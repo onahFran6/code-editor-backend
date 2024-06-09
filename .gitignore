@@ -1,0 +1,38 @@
+# Ignore coverage reports
+coverage
+
+# Ignore environment configuration files
+.env
+.env.production
+.env.test
+.env.development
+
+# Ignore generated build files
+build
+
+
+# Ignore dependency directories
+node_modules
+bower_components
+
+# Ignore editor-specific files and directories
+.idea
+*.iml
+.DS_Store
+Thumbs.db
+
+# Ignore temporary files and directories
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
+*.swp
+pids
+logs
+results
+tmp
+
+# Ignore lock files
+yarn.lock

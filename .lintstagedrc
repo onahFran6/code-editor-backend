@@ -1,0 +1,9 @@
+{
+  "*.ts": [
+    "eslint --fix",
+    "prettier --write",
+    "tsc --project tsconfig.json",
+    "npm run build",
+    "git add dist"
+  ]
+}
