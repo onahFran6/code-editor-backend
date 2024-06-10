@@ -18,26 +18,27 @@ const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // Connect to the database
         yield models_1.sequelize.authenticate();
-        console.log("Database connection has been established successfully.");
+        console.log('Database connection has been established successfully.');
         yield models_1.sequelize.sync({ alter: true });
-        console.log("Database synchronized successfully.");
+        console.log('Database synchronized successfully.');
         // Start Express server
-        const server = app_1.default.listen(app_1.default.get("port"), () => {
-            console.log(`App is running at http://localhost:${app_1.default.get("port")} in ${app_1.default.get("env")} mode`);
-            console.log("Press CTRL-C to stop");
+        const server = app_1.default.listen(app_1.default.get('port'), () => {
+            console.log(`App is running at http://localhost:${app_1.default.get('port')} in ${app_1.default.get('env')} mode`);
+            console.log('Press CTRL-C to stop');
         });
         // Gracefully handle server termination
-        process.on("SIGINT", () => {
+        process.on('SIGINT', () => {
             server.close(() => {
-                console.log("Server terminated");
+                console.log('Server terminated');
                 process.exit(0);
             });
         });
     }
     catch (error) {
-        console.error("Failed to start server:", error);
+        console.error('Failed to start server:', error);
         process.exit(1);
     }
 });
 startServer();
+exports.default = startServer;
 //# sourceMappingURL=server.js.map
