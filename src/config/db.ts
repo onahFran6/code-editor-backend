@@ -1,12 +1,12 @@
 // src/db.ts
-import { Sequelize } from "sequelize";
-import dotenv from "dotenv";
-import config from ".";
+import { Sequelize } from 'sequelize';
+import dotenv from 'dotenv';
+import config from '.';
 
 dotenv.config();
 
 const dbLogging =
-  process.env.NODE_ENV === "development" || process.env.LOG === "true";
+  process.env.NODE_ENV === 'development' || process.env.LOG === 'true';
 
 const sequelize = new Sequelize(
   config.DB_NAME,
@@ -16,8 +16,8 @@ const sequelize = new Sequelize(
     host: config.DB_HOST,
     logging: dbLogging,
     dialect: config.DB_DIALECT as any,
-    dialectModule: require('mysql2')
-  }
+    dialectModule: require('mysql2'),
+  },
 );
 
 export default sequelize;

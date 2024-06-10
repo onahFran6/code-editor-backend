@@ -1,8 +1,9 @@
-import jwt from "jsonwebtoken";
+import jwt from 'jsonwebtoken';
+import config from '../config';
 
-export const generateAccessToken = (email: string) => {
-  const token = jwt.sign({ email }, process.env.JWT_SECRET as string, {
-    expiresIn: "1h",
+export const generateAccessToken = ({ email }: { email: string }): string => {
+  const token = jwt.sign({ email }, config.JWT_SECRET, {
+    expiresIn: config.JWT_TOKEN_EXPIRE,
   });
   return token;
 };

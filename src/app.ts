@@ -9,9 +9,10 @@ import errorHandler from 'errorhandler';
 
 import config from './config';
 import {
-  errorHandler as customErrorHandler,
   notFoundHandler,
+  customErrorHandler,
 } from './middleware/errorMiddleware';
+import UserRouter from './routes/authRoutes';
 
 // Create Express server
 const app = express();
@@ -35,6 +36,8 @@ app.use(
 app.get('/apis/v1/', (req: Request, res: Response) => {
   res.send('Server is healthy');
 });
+
+app.use('/apis/v1/users', UserRouter);
 
 // Error handling middleware
 app.use(notFoundHandler);
