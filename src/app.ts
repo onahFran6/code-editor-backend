@@ -13,6 +13,9 @@ import {
   customErrorHandler,
 } from './middleware/errorMiddleware';
 import UserRouter from './routes/authRoutes';
+import problemRoutes from './routes/problemRoutes';
+import attemptRoutes from './routes/attemptRoutes';
+import adminRoutes from './routes/adminRoutes';
 
 // Create Express server
 const app = express();
@@ -38,6 +41,9 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.use('/apis/v1/users', UserRouter);
+app.use('/apis/v1/problems', problemRoutes);
+app.use('/apis/v1/attempts', attemptRoutes);
+app.use('/apis/v1/admin', adminRoutes);
 
 // Error handling middleware
 app.use(notFoundHandler);

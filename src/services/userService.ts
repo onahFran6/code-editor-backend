@@ -2,6 +2,7 @@ import User from '../models/userModel';
 import { ValidationError, UnauthorizedError } from '../utils/customError';
 import { generateAccessToken } from '../utils';
 import { comparePassword, hashPassword } from '../utils/passwordUtil';
+import { Attempt, Problem } from '../models';
 
 export const registerUser = async ({
   firstName,
@@ -72,4 +73,125 @@ export const loginUser = async ({
     lastName: user.lastName,
     role: user.role,
   };
+};
+
+export const getUsers = async () => {
+  const users = await User.findAll({
+    attributes: ['id', 'firstName', 'lastName', 'email', 'role'],
+  });
+  return users;
+};
+
+export const getUsersWithStatsOld = async () => {
+  const users = await User.findAll({
+    attributes: ['id', 'firstName', 'lastName', 'email', 'role'],
+  });
+
+  const userStatsPromises = users.map(async (user) => {
+    const attempts = await Attempt.findAll({
+      where: { userId: user.id },
+      attributes: ['status'],
+    });
+
+    const totalAttempts = attempts.length;
+    const successfulAttempts = attempts.filter(
+      (attempt) => attempt.status === 'success',
+    ).length;
+    const failedAttempts = attempts.filter(
+      (attempt) => attempt.status === 'fail',
+    ).length;
+
+    return {
+      ...user.toJSON(),
+      totalAttempts,
+      successfulAttempts,
+      failedAttempts,
+    };
+  });
+
+  const usersWithStats = await Promise.all(userStatsPromises);
+  return usersWithStats;
+};
+
+export const getUsersWithStats = async () => {
+  const users = await User.findAll({
+    where: { role: 'user' },
+    attributes: ['id', 'firstName', 'lastName', 'email', 'role'],
+    raw: true,
+  });
+
+  const userIds = users.map((user) => user.id);
+
+  const attempts = await Attempt.findAll({
+    where: { userId: userIds },
+    attributes: ['userId', 'status'],
+    raw: true,
+  });
+
+  const userStats = users.map((user) => {
+    const userAttempts = attempts.filter(
+      (attempt) => attempt.userId === user.id,
+    );
+    const totalAttempts = userAttempts.length;
+    const successfulAttempts = userAttempts.filter(
+      (attempt) => attempt.status === 'success',
+    ).length;
+    const failedAttempts = userAttempts.filter(
+      (attempt) => attempt.status === 'fail',
+    ).length;
+
+    return {
+      ...user,
+      totalAttempts,
+      successfulAttempts,
+      failedAttempts,
+    };
+  });
+
+  return userStats;
+};
+
+export const getUserById = async (userId: number) => {
+  const user = await User.findByPk(userId, {
+    attributes: ['id', 'firstName', 'lastName', 'email', 'profilePicture'],
+  });
+  return user;
+};
+
+export const getUserStats = async (userId: number) => {
+  const attempts = await Attempt.findAll({
+    where: { userId },
+    attributes: ['id', 'status'],
+  });
+
+  const totalAttempts = attempts.length;
+  const successfulAttempts = attempts.filter(
+    (attempt) => attempt.status === 'success',
+  ).length;
+  const failedAttempts = attempts.filter(
+    (attempt) => attempt.status === 'fail',
+  ).length;
+  const successRatio =
+    totalAttempts > 0 ? successfulAttempts / totalAttempts : 0;
+  const failRatio = totalAttempts > 0 ? failedAttempts / totalAttempts : 0;
+
+  const stats = {
+    totalAttempts,
+    successfulAttempts,
+    failedAttempts,
+    successRatio,
+    failRatio,
+  };
+
+  return stats;
+};
+
+export const getUserAttemptDetails = async (userId: number) => {
+  const attempts = await Attempt.findAll({
+    where: { userId },
+    include: [{ model: Problem, as: 'problem' }],
+    order: [['createdAt', 'DESC']],
+  });
+
+  return attempts;
 };

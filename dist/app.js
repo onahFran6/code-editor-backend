@@ -14,6 +14,9 @@ const errorhandler_1 = __importDefault(require("errorhandler"));
 const config_1 = __importDefault(require("./config"));
 const errorMiddleware_1 = require("./middleware/errorMiddleware");
 const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
+const problemRoutes_1 = __importDefault(require("./routes/problemRoutes"));
+const attemptRoutes_1 = __importDefault(require("./routes/attemptRoutes"));
+const adminRoutes_1 = __importDefault(require("./routes/adminRoutes"));
 // Create Express server
 const app = (0, express_1.default)();
 // Express configuration
@@ -32,6 +35,9 @@ app.get('/', (req, res) => {
     res.send('Server is healthy');
 });
 app.use('/apis/v1/users', authRoutes_1.default);
+app.use('/apis/v1/problems', problemRoutes_1.default);
+app.use('/apis/v1/attempts', attemptRoutes_1.default);
+app.use('/apis/v1/admin', adminRoutes_1.default);
 // Error handling middleware
 app.use(errorMiddleware_1.notFoundHandler);
 app.use(errorMiddleware_1.customErrorHandler);
