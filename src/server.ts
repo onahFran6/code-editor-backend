@@ -1,15 +1,13 @@
 import app from './app';
-import { sequelize } from './models';
+import sequelize from './config/db';
 
 const startServer = async () => {
   try {
-    // Connect to the database
     await sequelize.authenticate();
     console.log('Database connection has been established successfully.');
     await sequelize.sync({ alter: true });
     console.log('Database synchronized successfully.');
 
-    // Start Express server
     const server = app.listen(app.get('port'), () => {
       console.log(
         `App is running at http://localhost:${app.get('port')} in ${app.get(
@@ -19,7 +17,6 @@ const startServer = async () => {
       console.log('Press CTRL-C to stop');
     });
 
-    // Gracefully handle server termination
     process.on('SIGINT', () => {
       server.close(() => {
         console.log('Server terminated');
@@ -33,5 +30,3 @@ const startServer = async () => {
 };
 
 startServer();
-
-export default startServer;

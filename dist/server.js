@@ -13,20 +13,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const app_1 = __importDefault(require("./app"));
-const models_1 = require("./models");
+const db_1 = __importDefault(require("./config/db"));
 const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // Connect to the database
-        yield models_1.sequelize.authenticate();
+        yield db_1.default.authenticate();
         console.log('Database connection has been established successfully.');
-        yield models_1.sequelize.sync({ alter: true });
+        yield db_1.default.sync({ alter: true });
         console.log('Database synchronized successfully.');
-        // Start Express server
         const server = app_1.default.listen(app_1.default.get('port'), () => {
             console.log(`App is running at http://localhost:${app_1.default.get('port')} in ${app_1.default.get('env')} mode`);
             console.log('Press CTRL-C to stop');
         });
-        // Gracefully handle server termination
         process.on('SIGINT', () => {
             server.close(() => {
                 console.log('Server terminated');
@@ -40,5 +37,4 @@ const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 startServer();
-exports.default = startServer;
 //# sourceMappingURL=server.js.map
