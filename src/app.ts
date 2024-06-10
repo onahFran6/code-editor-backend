@@ -33,7 +33,7 @@ app.use(
   express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }),
 );
 
-app.get('/apis/v1/', (req: Request, res: Response) => {
+app.get('/', (req: Request, res: Response) => {
   res.send('Server is healthy');
 });
 

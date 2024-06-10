@@ -28,7 +28,7 @@ app.use(body_parser_1.default.urlencoded({ extended: true }));
 app.use(lusca_1.default.xframe('SAMEORIGIN'));
 app.use(lusca_1.default.xssProtection(true));
 app.use(express_1.default.static(path_1.default.join(__dirname, 'public'), { maxAge: 31557600000 }));
-app.get('/apis/v1/', (req, res) => {
+app.get('/', (req, res) => {
     res.send('Server is healthy');
 });
 app.use('/apis/v1/users', authRoutes_1.default);
