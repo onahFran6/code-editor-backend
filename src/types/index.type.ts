@@ -7,4 +7,5 @@ export type EnvironmentConfig = {
   DB_NAME: string;
   JWT_SECRET: string;
   JWT_TOKEN_EXPIRE: string;
+  DB_PORT?: number;
 };
