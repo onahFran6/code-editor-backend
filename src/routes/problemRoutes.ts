@@ -10,7 +10,6 @@ const router: Router = express.Router();
 
 // GET /api/problems - Get all problems
 router.get('/', getProblems);
-router.get('/free/:id', getProblem);
 router.get('/:id', authenticate, getProblemWithTests);
 
 // You can add more routes here, such as:

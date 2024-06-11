@@ -1,4 +1,9 @@
-import { Model, DataTypes, ForeignKey } from 'sequelize';
+import {
+  Model,
+  DataTypes,
+  ForeignKey,
+  BelongsToGetAssociationMixin,
+} from 'sequelize';
 import { sequelize } from './index';
 import Problem from './problemModel';
 

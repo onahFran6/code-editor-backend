@@ -6,29 +6,29 @@ const { TestCase } = require('../models');
 
 const testCases = [
   {
-    input: '2,7,11,15\n9',
+    input: '[2,7,11,15]\n9',
     output: '[0,1]',
     problemId: 1,
     createdAt: new Date(),
     updatedAt: new Date(),
   },
   {
-    input: '3,2,4\n6',
+    input: '[3,2,4]\n6',
     output: '[1,2]',
     problemId: 1,
     createdAt: new Date(),
     updatedAt: new Date(),
   },
   {
-    input: '3,3\n6',
-    output: '[0,1]',
+    input: '3',
+    output: '["1","2","Fizz"]',
     problemId: 2,
     createdAt: new Date(),
     updatedAt: new Date(),
   },
   {
-    input: '2,4\n6',
-    output: '[0,1]',
+    input: '5',
+    output: '["1","2","Fizz","4","Buzz"]',
     problemId: 2,
     createdAt: new Date(),
     updatedAt: new Date(),

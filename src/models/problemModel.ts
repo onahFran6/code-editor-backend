@@ -43,13 +43,6 @@ class Problem extends Model<ProblemAttributes> implements ProblemAttributes {
   public hasSolution!: HasManyHasAssociationMixin<Solution, number>;
   public countSolutions!: HasManyCountAssociationsMixin;
   public createSolution!: HasManyCreateAssociationMixin<Solution>;
-
-  // Define association with Attempt
-  // public getAttempts!: HasManyGetAssociationsMixin<Attempt>;
-  // public addAttempt!: HasManyAddAssociationMixin<Attempt, number>;
-  // public hasAttempt!: HasManyHasAssociationMixin<Attempt, number>;
-  // public countAttempts!: HasManyCountAssociationsMixin;
-  // public createAttempt!: HasManyCreateAssociationMixin<Attempt>;
 }
 
 Problem.init(

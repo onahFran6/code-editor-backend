@@ -9,7 +9,6 @@ const authMiddleware_1 = require("../middleware/authMiddleware");
 const router = express_1.default.Router();
 // GET /api/problems - Get all problems
 router.get('/', problemController_1.getProblems);
-router.get('/free/:id', problemController_1.getProblem);
 router.get('/:id', authMiddleware_1.authenticate, problemController_1.getProblemWithTests);
 // You can add more routes here, such as:
 // GET /api/problems/:id - Get a specific problem by ID

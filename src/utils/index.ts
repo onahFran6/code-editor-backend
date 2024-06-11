@@ -7,3 +7,11 @@ export const generateAccessToken = ({ email }: { email: string }): string => {
   });
   return token;
 };
+
+export const isEqualJson = (obj1: any, obj2: any): boolean => {
+  return JSON.stringify(obj1) === JSON.stringify(obj2);
+};
+
+export const stringifyArrayWithoutSpaces = (arr: any[]): string => {
+  return `[${arr.join(',')}]`;
+};

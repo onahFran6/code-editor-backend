@@ -51,7 +51,7 @@ const getProblemById = (_b) => __awaiter(void 0, [_b], void 0, function* ({ prob
 exports.getProblemById = getProblemById;
 const getProblemWithTestsById = (_c) => __awaiter(void 0, [_c], void 0, function* ({ problemId, userId, }) {
     const problem = yield models_1.Problem.findOne({
-        where: { id: problemId, status: 'Published' },
+        where: { id: problemId },
         attributes: ['id', 'title', 'description', 'difficulty'],
         include: [
             {

@@ -69,7 +69,7 @@ export const getProblemWithTestsById = async ({
   userId?: number;
 }) => {
   const problem = await Problem.findOne({
-    where: { id: problemId, status: 'Published' },
+    where: { id: problemId },
     attributes: ['id', 'title', 'description', 'difficulty'],
     include: [
       {

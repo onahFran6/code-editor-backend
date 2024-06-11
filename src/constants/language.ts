@@ -1,1 +1,1 @@
-export const ALLOWED_LANGUAGES = ['javascript', 'python', 'java'];
+export const ALLOWED_LANGUAGES = ['javascript', 'python'];

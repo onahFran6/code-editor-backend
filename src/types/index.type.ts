@@ -8,4 +8,14 @@ export type EnvironmentConfig = {
   JWT_SECRET: string;
   JWT_TOKEN_EXPIRE: string;
   DB_PORT?: number;
+  JUDGE0_API_KEY: string;
+};
+
+export type TestCase = {
+  input: string;
+  expectedOutput: string;
+};
+
+export type ProblemTestCasesType = {
+  [problemId: number]: TestCase[];
 };
