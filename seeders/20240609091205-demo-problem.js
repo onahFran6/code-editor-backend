@@ -27,13 +27,13 @@ module.exports = {
     /**
      * Add seed commands here.
      */
-    await queryInterface.bulkInsert('Problems', sampleProblems, {});
+    await queryInterface.bulkInsert('problems', sampleProblems, {});
   },
 
   async down(queryInterface, Sequelize) {
     /**
      * Add commands to revert seed here.
      */
-    await queryInterface.bulkDelete('Problems', null, {});
+    await queryInterface.bulkDelete('problems', null, {});
   },
 };

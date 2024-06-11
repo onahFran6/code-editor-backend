@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
 const sampleSolutions = [
   {
-    language: "javascript",
+    language: 'javascript',
     code: `
       function twoSum(nums, target) {
         const map = new Map();
@@ -22,7 +22,7 @@ const sampleSolutions = [
     updatedAt: new Date(),
   },
   {
-    language: "python",
+    language: 'python',
     code: `
       def twoSum(nums, target):
         seen = {}
@@ -38,6 +38,51 @@ const sampleSolutions = [
     createdAt: new Date(),
     updatedAt: new Date(),
   },
+  {
+    language: 'javascript',
+    code: `
+      function fizzBuzz(n) {
+        const answer = [];
+        for (let i = 1; i <= n; i++) {
+          if (i % 3 === 0 && i % 5 === 0) {
+            answer.push("FizzBuzz");
+          } else if (i % 3 === 0) {
+            answer.push("Fizz");
+          } else if (i % 5 === 0) {
+            answer.push("Buzz");
+          } else {
+            answer.push(i.toString());
+          }
+        }
+        return answer;
+      }
+    `,
+    problemId: 2,
+    userId: 1,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    language: 'python',
+    code: `
+      def fizzBuzz(n):
+        answer = []
+        for i in range(1, n + 1):
+          if i % 3 == 0 and i % 5 == 0:
+            answer.append("FizzBuzz")
+          elif i % 3 == 0:
+            answer.append("Fizz")
+          elif i % 5 == 0:
+            answer.append("Buzz")
+          else:
+            answer.append(str(i))
+        return answer
+    `,
+    problemId: 2,
+    userId: 2,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
 ];
 
 /** @type {import('sequelize-cli').Migration} */
@@ -46,13 +91,13 @@ module.exports = {
     /**
      * Add seed commands here.
      */
-    await queryInterface.bulkInsert("solutions", sampleSolutions, {});
+    await queryInterface.bulkInsert('solutions', sampleSolutions, {});
   },
 
   async down(queryInterface, Sequelize) {
     /**
      * Add commands to revert seed here.
      */
-    await queryInterface.bulkDelete("solutions", null, {});
+    await queryInterface.bulkDelete('solutions', null, {});
   },
 };
