@@ -68,7 +68,4 @@ Solution.init(
   },
 );
 
-Solution.belongsTo(User, { foreignKey: 'userId', as: 'user' });
-// Solution.belongsTo(Problem, { foreignKey: 'problemId', as: 'problem' });
-
 export default Solution;

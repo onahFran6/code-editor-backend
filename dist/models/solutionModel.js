@@ -45,7 +45,5 @@ Solution.init({
     tableName: 'solutions',
     timestamps: true,
 });
-Solution.belongsTo(userModel_1.default, { foreignKey: 'userId', as: 'user' });
-// Solution.belongsTo(Problem, { foreignKey: 'problemId', as: 'problem' });
 exports.default = Solution;
 //# sourceMappingURL=solutionModel.js.map

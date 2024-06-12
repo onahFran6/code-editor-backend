@@ -46,13 +46,6 @@ const submitCode = (code, language, problemId) => __awaiter(void 0, void 0, void
         const { token } = response.data;
         const resultResponse = yield axios_1.default.get(`${JUDGE0_API_URL}/${token}`, JUDGE0_API_HEADERS);
         const { stdout, stderr, status, expectedOutput, compile_output } = resultResponse.data;
-        // console.log('======>>>>>> DATA', {
-        //   stdout,
-        //   stderr,
-        //   status,
-        //   expectedOutput,
-        //   compile_output,
-        // });
         if (status.id !== 3 || stderr) {
             return { status: 'fail', output: stderr || 'Compilation Error' };
         }

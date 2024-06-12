@@ -1,6 +1,8 @@
 // src/models/User.ts
 import { Model, DataTypes, Optional } from 'sequelize';
 import sequelize from '../config/db';
+import Attempt from './attemptModel';
+import Solution from './solutionModel';
 
 export interface UserAttributes {
   id: number;
@@ -51,6 +53,7 @@ User.init(
     email: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
     password: {
       type: DataTypes.STRING,

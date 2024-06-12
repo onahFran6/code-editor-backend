@@ -51,7 +51,5 @@ Attempt.init({
     modelName: 'Attempt',
     tableName: 'attempts',
 });
-Attempt.belongsTo(userModel_1.default, { foreignKey: 'userId', as: 'user' });
-Attempt.belongsTo(problemModel_1.default, { foreignKey: 'problemId', as: 'problem' });
 exports.default = Attempt;
 //# sourceMappingURL=attemptModel.js.map

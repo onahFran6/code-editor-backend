@@ -1,7 +1,5 @@
 import axios from 'axios';
 import config from '../config';
-import jsTemplates from '../constants/jsTemplate';
-import pythonTemplates from '../constants/pyTemplate';
 import { Problem, TestCase } from '../models';
 
 const JUDGE0_API_URL = 'https://judge0-ce.p.rapidapi.com/submissions';
@@ -59,14 +57,6 @@ export const submitCode = async (
     );
     const { stdout, stderr, status, expectedOutput, compile_output } =
       resultResponse.data;
-
-    // console.log('======>>>>>> DATA', {
-    //   stdout,
-    //   stderr,
-    //   status,
-    //   expectedOutput,
-    //   compile_output,
-    // });
 
     if (status.id !== 3 || stderr) {
       return { status: 'fail', output: stderr || 'Compilation Error' };

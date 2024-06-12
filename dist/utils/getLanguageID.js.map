@@ -1,0 +1,1 @@
+{"version":3,"file":"getLanguageID.js","sourceRoot":"","sources":["../../src/utils/getLanguageID.ts"],"names":[],"mappings":";;;AAAO,MAAM,aAAa,GAAG,CAAC,QAAgB,EAAU,EAAE;IACxD,MAAM,WAAW,GAA8B;QAC7C,UAAU,EAAE,EAAE;QACd,MAAM,EAAE,EAAE;QACV,+BAA+B;KAChC,CAAC;IAEF,OAAO,WAAW,CAAC,QAAQ,CAAC,WAAW,EAAE,CAAC,IAAI,EAAE,CAAC,CAAC,wBAAwB;AAC5E,CAAC,CAAC;AARW,QAAA,aAAa,iBAQxB"}

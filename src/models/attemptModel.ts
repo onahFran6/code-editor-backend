@@ -78,7 +78,4 @@ Attempt.init(
   },
 );
 
-Attempt.belongsTo(User, { foreignKey: 'userId', as: 'user' });
-Attempt.belongsTo(Problem, { foreignKey: 'problemId', as: 'problem' });
-
 export default Attempt;
