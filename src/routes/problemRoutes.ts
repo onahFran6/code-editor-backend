@@ -5,13 +5,12 @@ import {
   getProblemWithTests,
 } from '../controllers/problemController';
 import { authenticate } from '../middleware/authMiddleware';
-import { getAllProblems } from '../services/problemService';
 
 const router: Router = express.Router();
 
 // GET /api/problems - Get all problems
-router.get('/', getAllProblems);
-router.get('/:id', getProblemWithTests);
+router.get('/', getProblems);
+router.get('/:id', authenticate, getProblemWithTests);
 
 // You can add more routes here, such as:
 // GET /api/problems/:id - Get a specific problem by ID
