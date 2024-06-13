@@ -4,6 +4,7 @@ import {
   getAttemptById,
   getAttemptsByProblemId,
   getUserAttempts,
+  saveAttempt,
 } from '../controllers/attemptController';
 import { authenticate } from '../middleware/authMiddleware';
 import {
@@ -22,5 +23,6 @@ router.get(
   validateProblemId,
   getAttemptsByProblemId,
 );
+router.post('/save', authenticate, saveAttempt);
 
 export default router;

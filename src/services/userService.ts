@@ -4,7 +4,6 @@ import { generateAccessToken } from '../utils';
 import { comparePassword, hashPassword } from '../utils/passwordUtil';
 import { Attempt, Problem } from '../models';
 import cloudinary from '../config/cloudinaryConfig';
-import { UploadedFilesType } from '../types/index.type';
 
 export const registerUser = async ({
   firstName,
@@ -202,7 +201,7 @@ export const getUserAttemptDetails = async (userId: number) => {
 export const uploadImagesAndReturnUrls = async ({
   rawFiles,
 }: {
-  rawFiles: UploadedFilesType;
+  rawFiles: any;
 }) => {
   try {
     const userImage = rawFiles['profileImage'][0];

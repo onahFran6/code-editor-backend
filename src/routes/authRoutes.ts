@@ -13,7 +13,7 @@ import { authenticate } from '../middleware/authMiddleware';
 
 const router: Router = express.Router();
 
-// const coupleUpload = upload.fields([{ name: 'profileImage', maxCount: 1 }]);
+const coupleUpload = upload.fields([{ name: 'profileImage' }]);
 router.post(
   '/upload',
   authenticate,

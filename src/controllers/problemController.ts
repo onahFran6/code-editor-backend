@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { sendCustomResponse } from '../utils/customResponse';
 import * as problemService from '../services/problemService';
+import { fetchDataFromRedis, setDataToRedis } from '../utils/redis';
 
 export const getProblems = async (
   req: Request,
@@ -9,7 +10,26 @@ export const getProblems = async (
 ) => {
   try {
     const userId = req.user?.id;
+
+    const problemscahed = `problemscahed`;
+
+    // const redisData = await fetchDataFromRedis({
+    //   redisUniqueId: problemscahed,
+    // });
+    // if (redisData) {
+    //   console.log('Data found in Redis cache');
+
+    //   sendCustomResponse({
+    //     res,
+    //     statusCode: 200,
+    //     message: 'Problems retrieved successfully',
+    //     data: redisData,
+    //   });
+    //   return;
+    // }
     const problems = await problemService.getAllProblems({ userId });
+
+    // await setDataToRedis({ redisUniqueId: problemscahed, data: problems });
 
     sendCustomResponse({
       res,

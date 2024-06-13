@@ -95,3 +95,43 @@ export const getAttemptsByProblemId = async (
     next(error);
   }
 };
+
+export const saveAttempt = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { problemId, code, language, output, status } = req.body;
+
+    const userId = req.user?.id;
+
+    const attempt = await Attempt.create({
+      userId: userId as number,
+      problemId: problemId,
+      code,
+      language,
+      output: output,
+      status,
+    });
+
+    if (status === 'success') {
+      // Create a new solution if the attempt is successful
+      await Solution.create({
+        language,
+        code,
+        userId: userId as number,
+        problemId: problemId as number,
+      });
+    }
+
+    res.status(201).json({
+      message: 'Attempt submitted',
+      attemptId: attempt.id,
+      status,
+      output: output,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
