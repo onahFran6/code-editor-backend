@@ -1,9 +1,22 @@
 import { Attempt, Problem, TestCase, User } from '../models';
+import CodeSnippet from '../models/codeSnippetModel';
 import Solution from '../models/solutionModel';
 
 export const getAllProblems = async ({ userId }: { userId?: number }) => {
   const problems = await Problem.findAll({
     attributes: ['id', 'title', 'description', 'difficulty'],
+    include: [
+      {
+        model: CodeSnippet,
+        as: 'codeSnippets',
+        attributes: ['id', 'language', 'starterCode', 'codeExample'],
+      },
+      {
+        model: TestCase,
+        as: 'testCases',
+        attributes: ['id', 'input', 'output'],
+      },
+    ],
   });
 
   if (userId) {
@@ -38,7 +51,20 @@ export const getProblemById = async ({
   problemId: number;
   userId?: number;
 }) => {
-  const problem = await Problem.findByPk(problemId);
+  const problem = await Problem.findByPk(problemId, {
+    include: [
+      {
+        model: CodeSnippet,
+        as: 'codeSnippets',
+        attributes: ['id', 'language', 'starterCode', 'codeExample'],
+      },
+      {
+        model: TestCase,
+        as: 'testCases',
+        attributes: ['id', 'input', 'output'],
+      },
+    ],
+  });
   if (!problem) {
     return null;
   }
@@ -88,6 +114,11 @@ export const getProblemWithTestsById = async ({
         model: TestCase,
         as: 'testCases',
         attributes: ['id', 'input', 'output'],
+      },
+      {
+        model: CodeSnippet,
+        as: 'codeSnippets',
+        attributes: ['id', 'language', 'starterCode', 'codeExample'],
       },
     ],
   });

@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "root",
-    "password": "root",
-    "database": "tvz-db",
-    "host": "127.0.0.1",
+    "username": "adminUser",
+    "password": "admin1920",
+    "database": "tvz-aws-db",
+    "host": "code-editor-db-637423460178.cfegw0oymo2c.us-east-1.rds.amazonaws.com",
     "dialect": "mysql"
   },
   "test": {

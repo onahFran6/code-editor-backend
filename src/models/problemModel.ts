@@ -11,6 +11,7 @@ import {
 import { sequelize } from './index'; // Import sequelize instance
 import Solution from './solutionModel'; // Import Solution model
 import TestCase from './testCasesModel';
+import CodeSnippet from './codeSnippetModel';
 
 interface ProblemAttributes {
   id: number;
@@ -43,6 +44,13 @@ class Problem extends Model<ProblemAttributes> implements ProblemAttributes {
   public hasSolution!: HasManyHasAssociationMixin<Solution, number>;
   public countSolutions!: HasManyCountAssociationsMixin;
   public createSolution!: HasManyCreateAssociationMixin<Solution>;
+
+  // Define association with CodeSnippet
+  public getCodeSnippets!: HasManyGetAssociationsMixin<CodeSnippet>;
+  public addCodeSnippet!: HasManyAddAssociationMixin<CodeSnippet, number>;
+  public hasCodeSnippet!: HasManyHasAssociationMixin<CodeSnippet, number>;
+  public countCodeSnippets!: HasManyCountAssociationsMixin;
+  public createCodeSnippet!: HasManyCreateAssociationMixin<CodeSnippet>;
 }
 
 Problem.init(
@@ -80,5 +88,6 @@ Problem.init(
 // Define associations after calling init
 Problem.hasMany(TestCase, { as: 'testCases', foreignKey: 'problemId' });
 Problem.hasMany(Solution, { as: 'solutions', foreignKey: 'problemId' });
+Problem.hasMany(CodeSnippet, { as: 'codeSnippets', foreignKey: 'problemId' });
 
 export default Problem;
