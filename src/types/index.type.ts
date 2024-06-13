@@ -19,3 +19,7 @@ export type TestCase = {
 export type ProblemTestCasesType = {
   [problemId: number]: TestCase[];
 };
+
+export interface UploadedFilesType {
+  [fieldname: string]: Express.Multer.File[];
+}

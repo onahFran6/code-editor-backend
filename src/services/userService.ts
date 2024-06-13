@@ -3,6 +3,8 @@ import { ValidationError, UnauthorizedError } from '../utils/customError';
 import { generateAccessToken } from '../utils';
 import { comparePassword, hashPassword } from '../utils/passwordUtil';
 import { Attempt, Problem } from '../models';
+import cloudinary from '../config/cloudinaryConfig';
+import { UploadedFilesType } from '../types/index.type';
 
 export const registerUser = async ({
   firstName,
@@ -195,4 +197,22 @@ export const getUserAttemptDetails = async (userId: number) => {
   });
 
   return attempts;
+};
+
+export const uploadImagesAndReturnUrls = async ({
+  rawFiles,
+}: {
+  rawFiles: UploadedFilesType;
+}) => {
+  try {
+    const userImage = rawFiles['profileImage'][0];
+
+    const { path } = userImage;
+    const result = await cloudinary.uploader.upload(path);
+    const imageUrl = result.secure_url;
+
+    return imageUrl;
+  } catch (error) {
+    throw new Error('Error uploading image');
+  }
 };

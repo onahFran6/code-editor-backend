@@ -106,7 +106,7 @@ export const getProblemWithTestsById = async ({
           {
             model: User,
             as: 'user',
-            attributes: ['firstName', 'lastName', 'email'],
+            attributes: ['firstName', 'lastName', 'email,problemId'],
           },
         ],
       },
