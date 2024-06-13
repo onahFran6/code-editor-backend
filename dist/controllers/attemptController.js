@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAttemptsByProblemId = exports.getAttemptById = exports.getUserAttempts = exports.createAttempt = void 0;
+exports.saveAttempt = exports.getAttemptsByProblemId = exports.getAttemptById = exports.getUserAttempts = exports.createAttempt = void 0;
 const models_1 = require("../models");
 const judge0Service_1 = require("../services/judge0Service");
 const attemptsService_1 = require("../services/attemptsService");
@@ -90,4 +90,38 @@ const getAttemptsByProblemId = (req, res, next) => __awaiter(void 0, void 0, voi
     }
 });
 exports.getAttemptsByProblemId = getAttemptsByProblemId;
+const saveAttempt = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _d;
+    try {
+        const { problemId, code, language, output, status } = req.body;
+        const userId = (_d = req.user) === null || _d === void 0 ? void 0 : _d.id;
+        const attempt = yield models_1.Attempt.create({
+            userId: userId,
+            problemId: problemId,
+            code,
+            language,
+            output: output,
+            status,
+        });
+        if (status === 'success') {
+            // Create a new solution if the attempt is successful
+            yield models_1.Solution.create({
+                language,
+                code,
+                userId: userId,
+                problemId: problemId,
+            });
+        }
+        res.status(201).json({
+            message: 'Attempt submitted',
+            attemptId: attempt.id,
+            status,
+            output: output,
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.saveAttempt = saveAttempt;
 //# sourceMappingURL=attemptController.js.map

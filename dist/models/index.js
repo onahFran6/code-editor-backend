@@ -18,7 +18,9 @@ const solutionModel_1 = __importDefault(require("./solutionModel"));
 exports.Solution = solutionModel_1.default;
 const testCasesModel_1 = __importDefault(require("./testCasesModel"));
 exports.TestCase = testCasesModel_1.default;
+const codeSnippetModel_1 = __importDefault(require("./codeSnippetModel"));
 attemptModel_1.default.belongsTo(userModel_1.default, { foreignKey: 'userId', as: 'user' });
 attemptModel_1.default.belongsTo(problemModel_1.default, { foreignKey: 'problemId', as: 'problem' });
 solutionModel_1.default.belongsTo(userModel_1.default, { foreignKey: 'userId', as: 'user' });
+codeSnippetModel_1.default.belongsTo(problemModel_1.default, { foreignKey: 'problemId', as: 'problem' });
 //# sourceMappingURL=index.js.map

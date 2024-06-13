@@ -12,12 +12,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUserAttemptDetails = exports.getUserStats = exports.getUserById = exports.getUsersWithStats = exports.getUsersWithStatsOld = exports.getUsers = exports.loginUser = exports.registerUser = void 0;
+exports.uploadImagesAndReturnUrls = exports.getUserAttemptDetails = exports.getUserStats = exports.getUserById = exports.getUsersWithStats = exports.getUsersWithStatsOld = exports.getUsers = exports.loginUser = exports.registerUser = void 0;
 const userModel_1 = __importDefault(require("../models/userModel"));
 const customError_1 = require("../utils/customError");
 const utils_1 = require("../utils");
 const passwordUtil_1 = require("../utils/passwordUtil");
 const models_1 = require("../models");
+const cloudinaryConfig_1 = __importDefault(require("../config/cloudinaryConfig"));
 const registerUser = (_a) => __awaiter(void 0, [_a], void 0, function* ({ firstName, lastName, email, password, }) {
     if (!firstName || !lastName || !email || !password) {
         throw new customError_1.ValidationError('First name, last name, email, and password are required.');
@@ -59,6 +60,7 @@ const loginUser = (_b) => __awaiter(void 0, [_b], void 0, function* ({ email, pa
         userId: user.id,
         firstName: user.firstName,
         lastName: user.lastName,
+        email: user.email,
         role: user.role,
     };
 });
@@ -150,4 +152,17 @@ const getUserAttemptDetails = (userId) => __awaiter(void 0, void 0, void 0, func
     return attempts;
 });
 exports.getUserAttemptDetails = getUserAttemptDetails;
+const uploadImagesAndReturnUrls = (_c) => __awaiter(void 0, [_c], void 0, function* ({ rawFiles, }) {
+    try {
+        const userImage = rawFiles['profileImage'][0];
+        const { path } = userImage;
+        const result = yield cloudinaryConfig_1.default.uploader.upload(path);
+        const imageUrl = result.secure_url;
+        return imageUrl;
+    }
+    catch (error) {
+        throw new Error('Error uploading image');
+    }
+});
+exports.uploadImagesAndReturnUrls = uploadImagesAndReturnUrls;
 //# sourceMappingURL=userService.js.map

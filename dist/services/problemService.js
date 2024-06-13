@@ -14,10 +14,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getProblemWithTestsById = exports.getProblemById = exports.getAllProblems = void 0;
 const models_1 = require("../models");
+const codeSnippetModel_1 = __importDefault(require("../models/codeSnippetModel"));
 const solutionModel_1 = __importDefault(require("../models/solutionModel"));
 const getAllProblems = (_a) => __awaiter(void 0, [_a], void 0, function* ({ userId }) {
     const problems = yield models_1.Problem.findAll({
         attributes: ['id', 'title', 'description', 'difficulty'],
+        include: [
+            {
+                model: codeSnippetModel_1.default,
+                as: 'codeSnippets',
+                attributes: ['id', 'language', 'starterCode', 'codeExample'],
+            },
+            {
+                model: models_1.TestCase,
+                as: 'testCases',
+                attributes: ['id', 'input', 'output'],
+            },
+        ],
     });
     if (userId) {
         const userAttempts = yield models_1.Attempt.findAll({
@@ -35,7 +48,20 @@ const getAllProblems = (_a) => __awaiter(void 0, [_a], void 0, function* ({ user
 });
 exports.getAllProblems = getAllProblems;
 const getProblemById = (_b) => __awaiter(void 0, [_b], void 0, function* ({ problemId, userId, }) {
-    const problem = yield models_1.Problem.findByPk(problemId);
+    const problem = yield models_1.Problem.findByPk(problemId, {
+        include: [
+            {
+                model: codeSnippetModel_1.default,
+                as: 'codeSnippets',
+                attributes: ['id', 'language', 'starterCode', 'codeExample'],
+            },
+            {
+                model: models_1.TestCase,
+                as: 'testCases',
+                attributes: ['id', 'input', 'output'],
+            },
+        ],
+    });
     if (!problem) {
         return null;
     }
@@ -62,7 +88,7 @@ const getProblemWithTestsById = (_c) => __awaiter(void 0, [_c], void 0, function
                     {
                         model: models_1.User,
                         as: 'user',
-                        attributes: ['firstName', 'lastName', 'email'],
+                        attributes: ['firstName', 'lastName', 'email,problemId'],
                     },
                 ],
             },
@@ -70,6 +96,11 @@ const getProblemWithTestsById = (_c) => __awaiter(void 0, [_c], void 0, function
                 model: models_1.TestCase,
                 as: 'testCases',
                 attributes: ['id', 'input', 'output'],
+            },
+            {
+                model: codeSnippetModel_1.default,
+                as: 'codeSnippets',
+                attributes: ['id', 'language', 'starterCode', 'codeExample'],
             },
         ],
     });

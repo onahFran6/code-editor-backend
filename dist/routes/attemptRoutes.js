@@ -11,5 +11,6 @@ const router = express_1.default.Router();
 router.post('/', authMiddleware_1.authenticate, attemptsValidator_1.validateCreateAttempt, attemptController_1.createAttempt);
 router.get('/:id', authMiddleware_1.authenticate, attemptsValidator_1.validateAttemptId, attemptController_1.getAttemptById);
 router.get('/problem/:problemId', authMiddleware_1.authenticate, attemptsValidator_1.validateProblemId, attemptController_1.getAttemptsByProblemId);
+router.post('/save', authMiddleware_1.authenticate, attemptController_1.saveAttempt);
 exports.default = router;
 //# sourceMappingURL=attemptRoutes.js.map

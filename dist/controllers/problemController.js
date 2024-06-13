@@ -39,7 +39,22 @@ const getProblems = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     var _a;
     try {
         const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+        const problemscahed = `problemscahed`;
+        // const redisData = await fetchDataFromRedis({
+        //   redisUniqueId: problemscahed,
+        // });
+        // if (redisData) {
+        //   console.log('Data found in Redis cache');
+        //   sendCustomResponse({
+        //     res,
+        //     statusCode: 200,
+        //     message: 'Problems retrieved successfully',
+        //     data: redisData,
+        //   });
+        //   return;
+        // }
         const problems = yield problemService.getAllProblems({ userId });
+        // await setDataToRedis({ redisUniqueId: problemscahed, data: problems });
         (0, customResponse_1.sendCustomResponse)({
             res,
             statusCode: 200,

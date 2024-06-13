@@ -25,6 +25,7 @@ app.set('views', path_1.default.join(__dirname, '../views'));
 app.set('view engine', 'pug');
 app.use((0, compression_1.default)());
 app.use((0, cors_1.default)());
+app.options('*', (0, cors_1.default)());
 app.use((0, helmet_1.default)());
 app.use(body_parser_1.default.json());
 app.use(body_parser_1.default.urlencoded({ extended: true }));

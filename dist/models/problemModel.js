@@ -8,6 +8,7 @@ const sequelize_1 = require("sequelize");
 const index_1 = require("./index"); // Import sequelize instance
 const solutionModel_1 = __importDefault(require("./solutionModel")); // Import Solution model
 const testCasesModel_1 = __importDefault(require("./testCasesModel"));
+const codeSnippetModel_1 = __importDefault(require("./codeSnippetModel"));
 class Problem extends sequelize_1.Model {
 }
 Problem.init({
@@ -41,5 +42,6 @@ Problem.init({
 // Define associations after calling init
 Problem.hasMany(testCasesModel_1.default, { as: 'testCases', foreignKey: 'problemId' });
 Problem.hasMany(solutionModel_1.default, { as: 'solutions', foreignKey: 'problemId' });
+Problem.hasMany(codeSnippetModel_1.default, { as: 'codeSnippets', foreignKey: 'problemId' });
 exports.default = Problem;
 //# sourceMappingURL=problemModel.js.map
