@@ -1,0 +1,62 @@
+# terraform.tfvars.sample
+
+# VPC Configuration
+vpc_name              = "example-vpc"  # Name of the Virtual Private Cloud (VPC)
+cidr_block            = "10.0.0.0/16"   # CIDR block for the VPC
+public_subnet_count   = 2                # Number of public subnets to create
+public_subnet_cidrs   = ["10.0.1.0/24", "10.0.2.0/24"]  # CIDR blocks for public subnets
+availability_zones    = ["us-east-1a", "us-east-1b"]     # Availability zones for the VPC
+
+# Security Group Configuration
+security_group_name   = "example-sg"    # Name of the security group for the application
+security_group_name_ecs_lb = "example-lb-sg"  # Name of the security group for the ECS load balancer
+
+# Load Balancer Configuration
+lb_name               = "example-lb"     # Name of the load balancer
+target_group_name     = "example-tg"     # Name of the target group for the load balancer
+
+# ECS Task Definition
+family                = "example-TASK"    # Family name for the ECS task
+container_definitions = [
+  {
+    name      = "example-container",   # Name of the ECS container
+    image     = "example-image",        # Docker image URI (example: 123456789012.dkr.ecr.us-east-1.amazonaws.com/example-image)
+    cpu       = 256,                    # CPU units for the container
+    memory    = 512,                    # Memory in MiB for the container
+    essential = true,                   # Whether the container is essential
+    portMappings = [
+      {
+        containerPort = 3000,          # Container port to expose
+        hostPort      = 3000,          # Host port to map to
+        protocol      = "tcp"           # Protocol for the port mapping
+      }
+    ],
+    environmentFiles = [
+      {
+        type  = "s3",                   # Type of environment file (e.g., s3)
+        value = "arn:aws:s3:::example-bucket/.env"  # Example ARN for the S3 environment file
+      }
+    ],
+    logConfiguration = {
+      logDriver = "awslogs",            # Log driver to use for the container
+      options = {
+        awslogs-group         = "/ecs/example",     # Log group name for AWS CloudWatch
+        awslogs-create-group  = "true",             # Whether to create the log group if it doesn't exist
+        awslogs-region        = "us-east-1",        # AWS region for the logs
+        awslogs-stream-prefix = "ecs"               # Prefix for the log stream
+      }
+    }
+  }
+]
+
+# Task Configuration
+cpu                  = "256"               # CPU units for the ECS task
+memory               = "512"               # Memory in MiB for the ECS task
+execution_role_arn   = "arn:aws:iam::123456789012:role/exampleExecutionRole"  # ARN of the execution role
+task_role_arn        = "arn:aws:iam::123456789012:role/exampleTaskRole"       # ARN of the task role
+
+# ECS Cluster and Service Configuration
+cluster_name         = "example-ecs-app"  # Name of the ECS cluster
+service_name         = "example-service"   # Name of the ECS service
+container_name       = "example-container"  # Name of the container in the ECS task
+container_port       = 3000                 # Port the container will listen on

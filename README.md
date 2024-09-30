@@ -1,5 +1,3 @@
-# Code Editor Backend Server
-
 This is the backend server for the Code Editor application. It provides APIs for user authentication, problem management, code submission, and user attempt tracking.
 
 ## Table of Contents
@@ -8,16 +6,20 @@ This is the backend server for the Code Editor application. It provides APIs for
   - [Table of Contents](#table-of-contents)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
-  - [Navigate to the project directory:](#navigate-to-the-project-directory)
-  - [Install the dependencies:](#install-the-dependencies)
   - [Configuration](#configuration)
   - [Database Setup](#database-setup)
-  - [(Optional)](#optional)
-    - [`Start the Server`](#start-the-server)
+  - [Running the Server](#running-the-server)
+    - [Without Docker](#without-docker)
+    - [With Docker](#with-docker)
+  - [Terraform Setup](#terraform-setup)
+    - [Why Use AWS ECS for Deployment](#why-use-aws-ecs-for-deployment)
+    - [Benefits of Using Terraform Scripts](#benefits-of-using-terraform-scripts)
+    - [Steps to Set Up ECR and Deploy Backend Server Using Terraform](#steps-to-set-up-ecr-and-deploy-backend-server-using-terraform)
   - [API Endpoints](#api-endpoints)
-  - [The backend server includes a test suite to ensure the correctness of its functionality. To run the tests, use the following command:](#the-backend-server-includes-a-test-suite-to-ensure-the-correctness-of-its-functionality-to-run-the-tests-use-the-following-command)
-  - [The backend server relies on the following key dependencies:](#the-backend-server-relies-on-the-following-key-dependencies)
-  - [folder structure](#folder-structure)
+  - [Testing](#testing)
+  - [Dependencies](#dependencies)
+  - [Contributing](#contributing)
+  - [Folder Structure](#folder-structure)
   - [License](#license)
 
 ## Prerequisites
@@ -27,6 +29,7 @@ Before running the backend server, ensure that you have the following prerequisi
 - Node.js (v12 or higher)
 - npm (Node Package Manager)
 - MySQL database
+- Docker (if using Docker)
 
 ## Installation
 
@@ -34,21 +37,21 @@ Before running the backend server, ensure that you have the following prerequisi
 
    ```bash
    git clone https://github.com/your-username/code-editor-backend.git
-   ```
 
-## Navigate to the project directory:
 
-## Install the dependencies:
+2. Navigate to the project directory:
 
-```bash
-   npm install
-```
+   ```bash
+   cd code-editor-backend
 
-## Configuration
 
-Create a .env file in the root directory of the project.
-Configure the following environment variables in the .env file:
+3. Install the dependencies:
+    ```bash
+    npm install
 
+##  Configuration
+Create a .env file in the root directory of the project. Configure the following environment variables in the .env file:
+text
 ```
 PORT=3000
 DB_HOST=localhost
@@ -62,12 +65,14 @@ JUDGE0_API_KEY=
 
 Replace your-username, your-password, and your-jwt-secret with your actual database credentials and JWT secret.
 
+
 ## Database Setup
+Create a new MySQL database for the application. Update the database connection details in the .env file. Run the database migrations to create the required tables:
+    ```bash
+    npm run db:migrate
 
-Create a new MySQL database for the application.
-Update the database connection details in the .env file.
-Run the database migrations to create the required tables:
-
+## (Optional)
+Seed the database with sample data:
 ```bash
 npm run db:migrate
 ```
@@ -94,6 +99,142 @@ yarn run dev
 
 ```
 
+## With Docker
+To run the server using Docker, follow these steps:
+Build the Docker image:
+```
+docker build -t code-editor-backend .
+```
+
+Run the Docker container:
+
+```
+docker run --env-file .env -p 3000:3000 code-editor-backend
+```
+
+This will start your server inside a Docker container using the configurations specified in your .env file.
+
+# Deployment to AWS Elastic Container Service (ECS) 
+
+## Terraform Setup
+The Terraform scripts included in this project are crucial for automating infrastructure setup on AWS, specifically for deploying the backend server and managing associated services.
+
+### Why Use AWS ECS for Deployment
+AWS Elastic Container Service (ECS) offers several advantages for deploying applications:
+-   Managed Service: ECS is a fully managed service that simplifies running containers at scale without needing to manage servers or clusters directly.
+
+-   Integration with AWS Services: ECS integrates seamlessly with other AWS services like CloudWatch for monitoring, IAM for security, and ECR for container storage, providing a cohesive environment for application deployment.
+
+-   Scalability: ECS allows you to easily scale your applications up or down based on demand. You can define scaling policies that automatically adjust resources according to traffic patterns.
+
+-   Cost Efficiency: With ECS, you only pay for what you use. It supports both EC2 launch types and Fargate, which allows you to run containers without managing servers, optimizing costs based on your application's needs.
+
+-   High Availability: ECS automatically distributes tasks across multiple availability zones, ensuring that your application remains available even in case of failures.
+
+### Benefits of Using Terraform Scripts
+Using Terraform scripts in this project provides several benefits:
+
+-   Infrastructure as Code: Define your infrastructure in code, making it reproducible and easier to manage. This reduces manual configuration errors and helps maintain consistency across environments.
+
+-   Automation: Automate AWS resource creation and management, such as ECR (Elastic Container Registry), ECS (Elastic Container Service), load balancers, and VPCs (Virtual Private Clouds), enabling you to focus on application development instead of infrastructure management.
+
+-   Ease of Use: With well-defined Terraform scripts, setting up your infrastructure becomes straightforward. You can quickly deploy or update resources without needing deep knowledge of AWS services.
+
+-   Version Control: Track changes over time using version control systems like Git, making it easier to roll back to previous states if necessary.
+
+-   Scalability and Flexibility: Easily scale your infrastructure as your application grows. Terraform modules allow for reusable configurations, simplifying adaptation to changing requirements.
+
+
+
+## Terraform AWS Infrastructure Setup
+
+This project uses Terraform to provision and manage AWS infrastructure. The infrastructure includes VPC, subnets, security groups, load balancers, ECS clusters, RDS instances, and S3 buckets.
+
+### Requirements
+
+- [Terraform](https://www.terraform.io/downloads.html) (Ensure you have the latest version installed)
+- [AWS CLI](https://aws.amazon.com/cli/) (Ensure it's configured with the correct credentials)
+
+## AWS CLI Setup
+
+### Step 1: Configure AWS Credentials
+
+You need to set up your AWS CLI with the appropriate credentials. Follow these steps:
+
+1. **Install AWS CLI** (if not already installed):
+
+   - On macOS, you can install AWS CLI using Homebrew:
+     ```sh
+     brew install awscli
+     ```
+
+2. **Set up AWS Credentials**:
+   - Open or create the AWS credentials file:
+     - On macOS/Linux: `~/.aws/credentials`
+   - Add the following configuration (replace `YOUR_WORK_ACCESS_KEY` and `YOUR_WORK_SECRET_KEY` with the credentials sent to you via WhatsApp):
+     ```ini
+     [interwap]
+     aws_access_key_id = YOUR_WORK_ACCESS_KEY
+     aws_secret_access_key = YOUR_WORK_SECRET_KEY
+     ```
+
+### Step 2: Configure AWS CLI Profile
+
+1. **Open or create the AWS config file**:
+   - On macOS/Linux: `~/.aws/config`
+2. **Add the following configuration**:
+   ```ini
+   [profile <profile name>]
+   region = us-east-1
+   output = json
+   ```
+
+### Step 3: Set AWS Profile
+
+On your shell/CLI set the `AWS_PROFILE` environment variable:
+
+```sh
+export AWS_PROFILE=<profile name>
+```
+
+## Terraform Usage
+
+### Step 1: Initialize the Terraform Project
+
+Before you can use Terraform effectively, you need to initialize your project directory. This step downloads the necessary provider plugins and modules required by your configuration files. Make sure to fill in terraform.tfvars with appropriate values before running initialization.
+
+```sh
+cd infractructure
+terraform init
+```
+
+### Step 2: Plan the Infrastructure
+
+To see what changes Terraform will make to your infrastructure, run the plan command:
+
+```sh
+terraform plan -var-file=terraform.tfvars
+```
+
+### Step 3: Apply the Configuration
+
+When you're ready to apply the changes, use the following command. This will create and/or modify the infrastructure as defined in your Terraform files:
+
+```sh
+terraform apply -var-file=terraform.tfvars --auto-approve
+```
+
+### Step 4: Modify Terraform Variables
+
+Before applying the Terraform configuration, ensure that the `terraform.tfvars` file has the correct values, especially for the ECS task definition and other environment-specific configurations.
+
+### Step 5: Destroy the Infrastructure (Optional)
+
+When you're finished and want to tear down the infrastructure, you can use the destroy command:
+
+```sh
+terraform destroy -var-file=terraform.tfvars --auto-approve
+```
 ## API Endpoints
 
 The following API endpoints are available:
@@ -154,149 +295,35 @@ When contributing, please follow the existing code style and conventions, and en
 ## folder structure
 
 ```
-.
+├── Dockerfile
 ├── LICENSE
 ├── README.md
-├── combined.log
 ├── config
 │   └── config.json
-├── coverage
-│   ├── clover.xml
-│   ├── coverage-final.json
-│   ├── lcov-report
-│   │   ├── base.css
-│   │   ├── block-navigation.js
-│   │   ├── config
-│   │   │   ├── db.ts.html
-│   │   │   ├── index.html
-│   │   │   └── index.ts.html
-│   │   ├── favicon.png
-│   │   ├── index.html
-│   │   ├── models
-│   │   │   ├── attemptModel.ts.html
-│   │   │   ├── index.html
-│   │   │   ├── index.ts.html
-│   │   │   ├── problemModel.ts.html
-│   │   │   ├── solutionModel.ts.html
-│   │   │   ├── testCasesModel.ts.html
-│   │   │   └── userModel.ts.html
-│   │   ├── prettify.css
-│   │   ├── prettify.js
-│   │   ├── services
-│   │   │   ├── attemptsService.ts.html
-│   │   │   ├── index.html
-│   │   │   ├── problemService.ts.html
-│   │   │   └── userService.ts.html
-│   │   ├── sort-arrow-sprite.png
-│   │   ├── sorter.js
-│   │   ├── src
-│   │   │   ├── app.ts.html
-│   │   │   ├── config
-│   │   │   ├── constants
-│   │   │   ├── controllers
-│   │   │   ├── index.html
-│   │   │   ├── lib
-│   │   │   ├── middleware
-│   │   │   ├── models
-│   │   │   ├── routes
-│   │   │   ├── services
-│   │   │   └── utils
-│   │   └── utils
-│   │       ├── customError.ts.html
-│   │       ├── index.html
-│   │       ├── index.ts.html
-│   │       └── passwordUtil.ts.html
-│   └── lcov.info
 ├── dist
 │   ├── app.js
 │   ├── app.js.map
 │   ├── config
-│   │   ├── db.js
-│   │   ├── db.js.map
-│   │   ├── index.js
-│   │   └── index.js.map
 │   ├── constants
-│   │   ├── index.js
-│   │   ├── index.js.map
-│   │   ├── jsTemplate.js
-│   │   ├── jsTemplate.js.map
-│   │   ├── language.js
-│   │   ├── language.js.map
-│   │   ├── pyTemplate.js
-│   │   └── pyTemplate.js.map
 │   ├── controllers
-│   │   ├── adminController.js
-│   │   ├── adminController.js.map
-│   │   ├── attemptController.js
-│   │   ├── attemptController.js.map
-│   │   ├── authController.js
-│   │   ├── authController.js.map
-│   │   ├── problemController.js
-│   │   └── problemController.js.map
 │   ├── lib
-│   │   └── validators
-│   │       ├── attemptsValidator.js
-│   │       ├── attemptsValidator.js.map
-│   │       ├── authValidator.js
-│   │       └── authValidator.js.map
 │   ├── middleware
-│   │   ├── authMiddleware.js
-│   │   ├── authMiddleware.js.map
-│   │   ├── errorMiddleware.js
-│   │   └── errorMiddleware.js.map
 │   ├── models
-│   │   ├── attemptModel.js
-│   │   ├── attemptModel.js.map
-│   │   ├── index.js
-│   │   ├── index.js.map
-│   │   ├── problemModel.js
-│   │   ├── problemModel.js.map
-│   │   ├── solutionModel.js
-│   │   ├── solutionModel.js.map
-│   │   ├── testCasesModel.js
-│   │   ├── testCasesModel.js.map
-│   │   ├── userModel.js
-│   │   └── userModel.js.map
 │   ├── routes
-│   │   ├── adminRoutes.js
-│   │   ├── adminRoutes.js.map
-│   │   ├── attemptRoutes.js
-│   │   ├── attemptRoutes.js.map
-│   │   ├── authRoutes.js
-│   │   ├── authRoutes.js.map
-│   │   ├── problemRoutes.js
-│   │   └── problemRoutes.js.map
 │   ├── server.js
 │   ├── server.js.map
 │   ├── services
-│   │   ├── attemptsService.js
-│   │   ├── attemptsService.js.map
-│   │   ├── judge0Service.js
-│   │   ├── judge0Service.js.map
-│   │   ├── problemService.js
-│   │   ├── problemService.js.map
-│   │   ├── userService.js
-│   │   └── userService.js.map
+│   ├── test
 │   ├── types
-│   │   ├── express
-│   │   │   ├── index.js
-│   │   │   └── index.js.map
-│   │   ├── index.type.js
-│   │   └── index.type.js.map
 │   └── utils
-│       ├── customError.js
-│       ├── customError.js.map
-│       ├── customResponse.js
-│       ├── customResponse.js.map
-│       ├── index.js
-│       ├── index.js.map
-│       ├── logger.js
-│       ├── logger.js.map
-│       ├── multer.js
-│       ├── multer.js.map
-│       ├── passwordUtil.js
-│       └── passwordUtil.js.map
-├── error.log
+├── entrypoint.sh
+├── infrastructure
+│   ├── main.tf
+│   ├── modules
+│   ├── readme.md
+│   ├── terraform.tfvars
+│   ├── terraform.tfvars.sample
+│   └── variable.tf
 ├── jest.config.js
 ├── migrations
 │   ├── 20240608063333-create-users.js
@@ -314,7 +341,11 @@ When contributing, please follow the existing code style and conventions, and en
 │   ├── 20240610091158-add_foreign_key_to_testcases.js
 │   ├── 20240610091507-20240610091158-add_foreign_key_to_testcases.js
 │   ├── 20240611030849-remove-email-index.js
-│   └── 20240611031017-20240611030849-remove-email-index.js
+│   ├── 20240611031017-20240611030849-remove-email-index.js
+│   ├── 20240613015024-add-code-snippet-table.js
+│   ├── 20240613015250-20240613015024-add-code-snippet-table.js
+│   ├── 20240613071927-20240613015024-add-code-snippet-table.js
+│   └── 20240613072119-20240613015024-add-code-snippet-table.js
 ├── models
 │   └── index.js
 ├── package-lock.json
@@ -324,68 +355,22 @@ When contributing, please follow the existing code style and conventions, and en
 │   ├── 20240609091205-demo-problem.js
 │   ├── 20240609091216-demo-solution.js
 │   ├── 20240609123253-test-cases.js
-│   └── 20240609134921-attempt.js
+│   ├── 20240609134921-attempt.js
+│   └── 20240613020428-code-snippets.js
 ├── src
 │   ├── app.ts
 │   ├── config
-│   │   ├── db.ts
-│   │   └── index.ts
 │   ├── constants
-│   │   ├── index.ts
-│   │   ├── jsTemplate.ts
-│   │   ├── language.ts
-│   │   └── pyTemplate.ts
 │   ├── controllers
-│   │   ├── adminController.ts
-│   │   ├── attemptController.ts
-│   │   ├── authController.ts
-│   │   └── problemController.ts
 │   ├── lib
-│   │   └── validators
-│   │       ├── attemptsValidator.ts
-│   │       └── authValidator.ts
 │   ├── middleware
-│   │   ├── authMiddleware.ts
-│   │   └── errorMiddleware.ts
 │   ├── models
-│   │   ├── attemptModel.ts
-│   │   ├── index.ts
-│   │   ├── problemModel.ts
-│   │   ├── solutionModel.ts
-│   │   ├── testCasesModel.ts
-│   │   └── userModel.ts
 │   ├── routes
-│   │   ├── adminRoutes.ts
-│   │   ├── attemptRoutes.ts
-│   │   ├── authRoutes.ts
-│   │   └── problemRoutes.ts
 │   ├── server.ts
 │   ├── services
-│   │   ├── attemptsService.ts
-│   │   ├── judge0Service.ts
-│   │   ├── problemService.ts
-│   │   └── userService.ts
 │   ├── test
-│   │   ├── integrations
-│   │   │   ├── admin.test.ts
-│   │   │   ├── attempt.test.ts
-│   │   │   ├── problem.test.ts
-│   │   │   └── user.test.ts
-│   │   └── units
 │   ├── types
-│   │   ├── express
-│   │   │   └── index.ts
-│   │   └── index.type.ts
 │   └── utils
-│       ├── callJudge0API.ts
-│       ├── customError.ts
-│       ├── customResponse.ts
-│       ├── getLanguageID.ts
-│       ├── index.ts
-│       ├── logger.ts
-│       ├── multer.ts
-│       ├── passwordUtil.ts
-│       └── wrapCodeWithTestCase.ts
 ├── tsconfig.json
 └── vercel.json
 
